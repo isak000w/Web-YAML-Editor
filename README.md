@@ -26,7 +26,7 @@ pip install -r requirements.txt
 python app.py                    # default: http://127.0.0.1:5003
 ```
 
-##Screenshots
+## Screenshots
 
 Main UI (Light Mode)
 <img width="1440" height="708" alt="1" src="https://github.com/user-attachments/assets/25bc383f-288b-48fa-bd11-b2fa75b219b8" />
