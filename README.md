@@ -15,8 +15,8 @@ A lightweight Flask web app for viewing, editing, validating, diffing, and versi
 
 ## Setup
 ```bash
-git clone https://github.com/your-name/local-yaml-editor.git
-cd local-yaml-editor
+git clone https://github.com/isak000w/Web-YAML-Editor/
+cd Web-YAML-Editor
 
 # Python ≥3.10 recommended
 python -m venv .venv
