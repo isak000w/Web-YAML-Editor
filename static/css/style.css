@@ -1,0 +1,163 @@
+html { font-size: 16px; line-height: 1.5; }
+body { margin: 0; }
+.container { padding: 32px; }
+/* Headings and section spacing */
+h2 { font-size: 1.35rem; margin: 24px 0 12px; }
+h2 + p { margin-top: 0; }
+h2 + p { margin-top: 0; }
+#msg-close {
+    background:none;
+    border:none;
+    font-size:1rem;
+    margin-left:8px;
+    cursor:pointer;
+}
+/* Message bar min-height for layout stability */
+#message { min-height: 24px; }
+/* ------------- GLOBAL LAYOUT ------------- */
+body            { background:#f8f9fa; }
+.container      { max-width:980px; margin:30px auto; padding:25px 30px;
+                  background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.05);
+                  border-radius:8px; font-family:system-ui, Arial, sans-serif; }
+
+
+button,
+input[type="file"]::file-selector-button {
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: .9rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f1f1f1;
+  transition: background .15s;
+}
+button:hover { background:#e6e6e6; }
+
+button.primary  { background:#0d6efd; color:#fff; border-color:#0d6efd; }
+button.primary:hover { background:#0b5cd5; }
+
+button.danger   { background:#dc3545; color:#fff; border-color:#dc3545; }
+button.danger:hover { background:#c82333; }
+/* File-row hover and icon space */
+.file-item { display:flex; align-items:center; gap:8px; }
+.file-item:hover { background:#f8f9fa; }
+.file-icon { width:14px; height:14px; filter:grayscale(1); }
+/* Indent guides & sticky key column */
+.children { margin-left:1.8em; position: relative; }
+.children::before {
+  content:'';
+  position:absolute;
+  left:-.9em;
+  top:0;
+  bottom:0;
+  width:1px;
+  background:#e2e2e2;
+}
+
+.key-input { position: sticky; left:0; background:#fffbe6; z-index:1; }
+/* List count, breadcrumb, and dark mode tweaks */
+.list-count { font-size:.8rem; color:#6c757d; margin-left:4px; }
+.breadcrumb { margin-bottom:12px; }
+.breadcrumb a { color:#0066cc; text-decoration:none; }
+.breadcrumb a:hover { text-decoration:underline; }
+.switch { cursor:pointer; position:absolute; top:24px; right:32px; }
+.switch input { display:none; }
+
+/* ───────── DARK-MODE PALETTE & OVERRIDES ───────── */
+html[data-theme="dark"] {
+  /* base colours */
+  --bg:   #1e1e1e;
+  --fg:   #e6e6e6;
+  --card: #2b2b2b;
+  --link: #58a6ff;       /* accessible blue on dark */
+  --muted:#b5b5b5;
+
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* containers, cards */
+html[data-theme="dark"] body  { background: var(--bg); color: var(--fg); }
+html[data-theme="dark"] .container { background: var(--card); box-shadow: none; }
+html[data-theme="dark"] .card { background: #3a3a3a; border-color:#4a4a4a; }
+
+/* links: same colour for normal & visited */
+a, a:visited          { color: var(--link); }
+a:hover, a:focus      { text-decoration: underline; }
+
+/* file-list link hover row */
+html[data-theme="dark"] .file-item:hover { background:#333; }
+
+/* primary & danger buttons keep their colours; default buttons lighten */
+html[data-theme="dark"] button:not(.primary):not(.danger) { background:#4c4c4c; border-color:#666; color:var(--fg); }
+html[data-theme="dark"] button:not(.primary):not(.danger):hover { background:#575757; }
+
+/* file-input text (“No file chosen”) */
+html[data-theme="dark"] input[type="file"] { color: var(--muted); }
+
+/* search input contrast */
+html[data-theme="dark"] #search-input { background:#2c2c2c; border-color:#555; color:var(--fg); }
+
+/* yaml key/value inputs inside editor */
+html[data-theme="dark"] .key-input      { background:#4d4d2b; border-color:#9b8a00; color:var(--fg); }
+html[data-theme="dark"] .value-input    { background:#24364e; border-color:#4d7dbd; color:var(--fg); }
+
+/* diff pane */
+html[data-theme="dark"] .diff-output { background:#252526; color:#d4d4d4; }
+.message.success { background:#e9f5e9; color:#027502; transition:opacity .3s; }
+
+/* messages */
+.message        { margin:12px 0; padding:8px; border-radius:4px; }
+.message.error  { background:#ffe0e0; color:#b30000; }
+.message.success{ background:#e9f5e9; color:#027502; }
+
+/* file list */
+.file-list      { list-style:none; padding:0; }
+.file-item      { padding:10px 0; border-bottom:1px solid #eee;
+                  display:flex; align-items:center; justify-content:space-between; }
+.file-link      { font-weight:500; }
+
+/* upload card */
+.card           { background:#fafafa; border:1px dashed #ccc; padding:15px; border-radius:6px; }
+.upload-card h3 { margin-top:0; }
+
+/* toolbar */
+.toolbar        { margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+
+/* ------------- YAML TREE ------------- */
+.map-item, .list-item { margin:4px 0; }
+.toggle-btn     { cursor:pointer; font-weight:700; margin-right:6px; }
+.children       { margin-left:1.8em; }
+.children.hidden{ display:none; }
+
+/* editable fields */
+.key-input      { width:22%; min-width:100px; background:#fffbe6; font-weight:600;
+                  border:1px solid #ccac00; border-radius:4px; padding:2px 4px; margin-right:4px; }
+.value-input    { width:65%; background:#e7f2ff; border:1px solid #7fb3ff;
+                  border-radius:4px; padding:2px 4px; }
+textarea.value-input { height:5em; resize:vertical; }
+.colon          { margin-right:4px; font-weight:600; }
+.dash           { font-weight:600; margin-right:4px; }
+
+
+/* ––––– search UI styles ––––– */
+.search-bar { margin-bottom:14px; }
+#search-input { width:260px; padding:6px 8px; border:1px solid #ccc;
+border-radius:4px; font-size:0.9rem; }
+.search-results { border:1px solid #e2e8f0; border-radius:6px; max-height:250px;
+overflow:auto; margin-bottom:16px; }
+.search-results.hidden { display:none; }
+.search-result-item { padding:6px 8px; border-bottom:1px solid #f5f5f5; cursor:pointer; }
+.search-result-item:hover { background:#f1f1f1; }
+.search-results mark { background:#fff59d; }
+
+/* — keep the rest of your existing CSS below unchanged — */
+
+/* diff UI */
+.diff-bar       { margin-bottom:12px; display:flex; align-items:center; gap:6px; }
+.diff-output    { background:#1e1e1e; color:#d4d4d4; padding:10px; border-radius:6px;
+                  max-height:400px; overflow:auto; white-space:pre-wrap; }
+.diff-output.hidden { display:none; }
+
+.diff-output .insert { color:#81b88b; }
+.diff-output .delete { color:#e06c75; }

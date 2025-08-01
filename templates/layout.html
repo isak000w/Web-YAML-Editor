@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local YAML Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>YAML Editor</h1>
+
+        <nav class="breadcrumb">
+            <a href="{{ url_for('editor.index') }}">Home</a>
+            {% if file %} / {{ file.name }} {% endif %}
+        </nav>
+
+        <label class="switch">
+          <input id="theme-toggle" type="checkbox">
+          <span>🌙</span>
+        </label>
+
+        <!-- Message area -->
+        <div id="message" class="message{% if error %} error{% endif %}">
+            {% if error %}
+                {{ error }}
+                <button id="msg-close" aria-label="close">&times;</button>
+            {% endif %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/history.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/diff.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded',()=> {
+      const t = document.getElementById('theme-toggle');
+      const set = dark => document.documentElement.dataset.theme = dark?'dark':'';
+      t.checked = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      set(t.checked);
+      t.onchange = e => set(e.target.checked);
+    });
+    </script>
+</body>
+</html>

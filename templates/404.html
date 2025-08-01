@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>File not found</h2>
+<p>The file you requested doesn’t exist or was already deleted.</p>
+
+<a href="{{ url_for('editor.index') }}">
+    <button class="primary">Back to Home</button>
+</a>
+{% endblock %}

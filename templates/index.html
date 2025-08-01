@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="search-bar">
+  <input id="search-input" type="text" placeholder="Search …">
+</div>
+<div id="search-results" class="search-results hidden"></div>
+
+{# ———–– existing macro and rest of file unchanged ———–– #}
+{% macro render_node(node) %}
+    {% if node is string or node is number or node is boolean or node is none %}
+        <input class="value-input" type="text" value="{{ node }}">
+    {% elif node is mapping %}
+        <div class="map">
+        {% for key, value in node.items() %}
+            <div class="map-item">
+                {% if value is mapping or (value is sequence and not (value is string)) %}
+                    <span class="toggle-btn">[-]</span>
+                    <input class="key-input" type="text" value="{{ key }}">
+                    <div class="children">{{ render_node(value) }}</div>
+                {% else %}
+                    <input class="key-input" type="text" value="{{ key }}">
+                    <span class="colon">:</span>
+                    {% if value is string and '\n' in value %}
+                        <textarea class="value-input">{{ value }}</textarea>
+                    {% else %}
+                        <input class="value-input" type="text" value="{{ value|default('', true) }}">
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% elif node is sequence and not (node is string) %}
+        <div class="list">
+            <span class="list-count">({{ node|length }})</span>
+        {% for value in node %}
+            <div class="list-item">
+                {% if value is mapping or (value is sequence and not (value is string)) %}
+                    <span class="toggle-btn">[-]</span>
+                    <span class="node-key">Item {{ loop.index0 }}</span>
+                    <div class="children">{{ render_node(value) }}</div>
+                {% else %}
+                    <span class="dash">- </span>
+                    {% if value is string and '\n' in value %}
+                        <textarea class="value-input">{{ value }}</textarea>
+                    {% else %}
+                        <input class="value-input" type="text" value="{{ value|default('', true) }}">
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        {{ node }}
+    {% endif %}
+{% endmacro %}
+
+{# ===== EDITOR PAGE ===== #}
+{% if file %}
+
+<h2>Editing: {{ file.name }}</h2>
+<div class="toolbar">
+    <label>Current versions:</label>
+    <select id="history-select">
+        {% for v in versions %}
+            <option value="{{ v.id }}"{% if loop.first %} selected{% endif %}>
+                {{ v.display_time }}{% if loop.first %} (current){% endif %}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button id="save-btn" class="primary" data-file-id="{{ file.id }}">Save</button>
+    <button id="export-json-btn">Export JSON</button>
+</div>
+
+<div class="diff-bar">
+    <label>Compare: </label>
+    <select id="left-ver">
+        {% for v in versions %}<option value="{{ v.id }}">{{ v.display_time }}</option>{% endfor %}
+    </select>
+    <span>⇔</span>
+    <select id="right-ver">
+        {% for v in versions %}<option value="{{ v.id }}"{% if loop.first %} selected{% endif %}>{{ v.display_time }}</option>{% endfor %}
+    </select>
+    <button id="diff-btn">Show Diff</button>
+</div>
+
+<section id="editor">
+    {% if data %}{{ render_node(data) }}{% endif %}
+</section>
+
+<pre id="diff-output" class="diff-output hidden"></pre>
+
+<div id="json-section" class="json-section hidden">
+    <button id="copy-json-btn" class="copy-btn">Copy</button>
+    <pre id="json-output" class="json-pane"></pre>
+</div>
+
+{% else %}
+{# ====== HOME PAGE ====== #}
+<h2>Your YAML Files</h2>
+{% if files %}
+    <ul class="file-list">
+    {% for f in files %}
+        <li class="file-item">
+            <img src="{{ url_for('static', filename='img/yaml.svg') }}" class="file-icon" alt="">
+            <a class="file-link" href="{{ url_for('editor.edit_file', file_id=f.id) }}">{{ f.name }}</a>
+            <form action="{{ url_for('editor.delete_file', file_id=f.id) }}" method="post"
+                  onsubmit="return confirm('Delete {{ f.name }}?');">
+                <button class="danger">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p><em>No files uploaded yet.</em></p>
+{% endif %}
+
+<div class="card upload-card">
+    <h3>Upload a YAML file</h3>
+    <form action="{{ url_for('editor.upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="yaml_file" accept=".yaml,.yml">
+        <button type="submit" class="primary">Upload</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

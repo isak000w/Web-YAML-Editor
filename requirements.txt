@@ -1,0 +1,5 @@
+Flask>=2.2
+Flask-SQLAlchemy>=2.5
+SQLAlchemy>=1.4
+PyYAML>=6.0
+jsonschema>=4.0
